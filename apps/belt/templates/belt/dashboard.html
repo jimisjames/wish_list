@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Wisher</title>
+
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css' integrity='sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO'
+        crossorigin='anonymous'>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49'
+        crossorigin='anonymous'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js' integrity='sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy'
+        crossorigin='anonymous'></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    {% load static %}
+    <link rel='stylesheet' href='{% static "belt/css/index.css" %}'>
+
+    <script>
+
+        $(document).ready(function () {
+
+
+        })
+
+    </script>
+
+</head>
+
+<body>
+    <header>
+        <div class="row center">
+            <div class="col-7">
+                <h1>Wisher</h1>
+            </div>
+            <div class="col-3">
+                <a class="btn btn-info" href="/stats">View Stats</a>
+                <a class="btn btn-success" href="/wish">Make a wish!</a>
+            </div>
+            <div class="col-1">
+                <a class="btn btn-danger" href="/logout">Log Out</a>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <div class="row">
+            <div class="col space" id="banner">
+                <h1>Hello {{ request.session.user_name }}!</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10">
+                <h2>Your Wishes</h2>
+            </div>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Date Added</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for wish in wishes %}
+                <tr>
+                    <td>{{ wish.wish }} </td>
+                    <td>{{ wish.created_at }}</td>
+                    <td class="links">
+                        <a class="btn btn-danger" href="/remove/{{ wish.id }}">Remove</a>
+                        <a class="btn btn-primary" href="/wish/{{ wish.id }}">Edit</a>
+                        <a class="btn btn-success" href="/granted/{{ wish.id }}">Granted!</a>
+                    </td>
+                </tr>
+                {% endfor %}
+               
+            </tbody>
+        </table>
+        <h3>All Granted Wishes</h3>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Wisher</th>
+                    <th scope="col">Date Added</th>
+                    <th scope="col">Date Granted</th>
+                    <th scope="col">Likes</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for wish in all_granted %}
+                <tr>
+                    <td>{{ wish.wish }} </td>
+                    <td>{{ wish.user.first_name }} {{ wish.user.last_name }}</td>
+                    <td>{{ wish.created_at }}</td>
+                    <td>{{ wish.updated_at }}</td>
+                    <td>{{ wish.count_likes }}</td>
+                    {% if wish.user.id != request.session.user_id %}
+                        <td class="links"><a class="btn btn-primary" href="/like/{{ wish.id }}">Like</a></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
