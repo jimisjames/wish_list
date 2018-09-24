@@ -91,7 +91,7 @@ class User(models.Model):
 
 
 class Wish(models.Model):
-    user = models.ForeignKey(User, related_name="wishes")
+    user = models.ForeignKey(User, related_name="wishes", on_delete=models.CASCADE)
     wish = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     granted = models.BooleanField()
@@ -100,7 +100,7 @@ class Wish(models.Model):
 
 
 class Like(models.Model):
-    wish = models.ForeignKey(Wish, related_name="likes")
-    user = models.ForeignKey(User, related_name="likes")
+    wish = models.ForeignKey(Wish, related_name="likes", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
